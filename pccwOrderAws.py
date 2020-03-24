@@ -1,4 +1,4 @@
-import json, requests, os, sys, yaml
+import json, requests, os, sys, yaml, time
 import pccwMain
 #
 # PCCW credential needs to be set as env variables
@@ -21,9 +21,11 @@ if len(sys.argv) != 6:
 #
 # Order an AWS Direct Connect
 #
+# data tested: {"srcPortId":"5e429ef0d6b9a000166c3b65","destPortId":"5b456eda852dad001a8cf2cd","srcVlanRequest":null,"speed":500,"name":"AWS Direct Connect","type":"LAYER2","partner":{"account":"265034252711"},"regionId":"5a80c78c1347a30012dd1c53","destRegionId":"5a80c78c1347a30012dd1c53","duration":1,"durationUnit":"d","evergreen":false,"paymentType":"invoice"}
+#
 url = 'https://api.consoleconnect.com/api/company/eurovisionservices/connections/directConnectPartner/AWS/layer2'
+#  "destUsername": "amazon",
 body = {
-  "destUsername": "amazon",
   "type": "LAYER2",
   "name": sys.argv[3],
   "srcPortId": sys.argv[1],
@@ -34,7 +36,21 @@ body = {
     "account": sys.argv[2]
   }
 }
+body1 = """{"srcPortId": "5e429ef0d6b9a000166c3b65", "destPortId": "5b456eda852dad001a8cf2cd" , "srcVlanRequest": null, "speed": 500, "name": "AWS Direct Connect", "type": "LAYER2", "partner": {"account": "265034252711"}, "regionId": "5a80c78c1347a30012dd1c53","destRegionId": "5a80c78c1347a30012dd1c53", "duration": 1, "durationUnit": "d", "evergreen": false, "paymentType": "invoice"}"""
 #print(json.dumps(body))
-res = requests.put(url, data=json.dumps(body), headers = auth)
+#print(auth)
+#print(body1)
+#res = requests.put(url, data=json.dumps(body), headers = auth)
+res = requests.put(url, data=body1, headers = auth)
 response = json.loads(res.content.decode('utf-8'))
-print(yaml.dump(response))
+idPccw = response['id']
+#print(idPccw)
+#print(auth)
+while True:
+  response = pccwMain.ppcwReadConnection(auth, idPccw)
+  #print(response['status'])
+  if response['status'] == 'PENDING_ACCEPTANCE':
+      break
+  time.sleep(15)
+response = pccwMain.ppcwReadConnection(auth, idPccw)
+print(str(response['srcTag']) + ';' + str(response['destTag']) + ';' + str(response['partner']['connectionId']))

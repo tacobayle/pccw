@@ -17,7 +17,14 @@ def pccwGetToken(username, password):
     response = json.loads(res.content.decode('utf-8'))
     dict = {}
     dict['portal-token'] = response['token']
+    dict['Content-Type'] = 'application/json'
     return dict
+
+def ppcwReadConnection(fheaders, idConnection):
+    url = 'https://api.consoleconnect.com/api/company/eurovisionservices/connections/' + str(idConnection)
+    res = requests.get(url, headers = fheaders)
+    response = json.loads(res.content.decode('utf-8'))
+    return response
 
 #
 #
