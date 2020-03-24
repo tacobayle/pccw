@@ -1,26 +1,18 @@
-import json
-import requests
-import os
-import sys
-import yaml
+import json, requests, os, sys, yaml
+import pccwMain
 #
 # PCCW credential needs to be set as env variables
 #
 # export PCCWLOGIN=abcdef
 # export PCCWPASS=abcdef
-# 
+#
+# retrieve API token
+auth = pccwMain.pccwGetToken(os.environ['PCCWLOGIN'], os.environ['PCCWPASS'])
+#
 if len(sys.argv) != 2:
   print('ERROR: script expects one argument for connection id')
   exit()
 connectionId = sys.argv[1]
-url = 'https://api.consoleconnect.com/api/auth/token'
-payload = {}
-payload['email'] = os.environ['PCCWLOGIN']
-payload['password'] = os.environ['PCCWPASS']
-res = requests.put(url, data = payload)
-response = json.loads(res.content.decode('utf-8'))
-auth = {}
-auth['portal-token'] = response['token']
 #
 # Read Connection
 #

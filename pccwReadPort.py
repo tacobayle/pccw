@@ -1,26 +1,22 @@
-import json
-import requests
-import os
+import json, requests, os
+import pccwMain
 #
 # PCCW credential needs to be set as env variables
 #
 # export PCCWLOGIN=abcdef
 # export PCCWPASS=abcdef
-# 
-url = 'https://api.consoleconnect.com/api/auth/token'
-payload = {}
-payload['email'] = os.environ['PCCWLOGIN']
-payload['password'] = os.environ['PCCWPASS']
-res = requests.put(url, data = payload)
-response = json.loads(res.content.decode('utf-8'))
-auth = {}
-auth['portal-token'] = response['token']
+#
+# retrieve API token
+auth = pccwMain.pccwGetToken(os.environ['PCCWLOGIN'], os.environ['PCCWPASS'])
 #
 # List ports
 #
 url = 'https://api.consoleconnect.com/api/company/eurovisionservices/ports'
 res = requests.get(url, headers = auth)
 response = json.loads(res.content.decode('utf-8'))
+#
+# pretty print response
+#
 print('List of ports and services associated:')
 for port in response['results']:
   print('\tdataCenterFacility username: ' + str(port['dataCenterFacility']['username']))
@@ -39,9 +35,5 @@ for port in response['results']:
       print('\t\tid: ' + str(connection['id']))
       print('\t\tspeed: ' + str(connection['speed']))
       print('\t\tstatus: ' + str(connection['status']))
-    #url = 'https://api.consoleconnect.com/api/company/eurovisionservices/connections/' + str(connection['id'])
-    #res = requests.get(url, headers = auth)
-    #response = json.loads(res.content.decode('utf-8'))
-    #print(response)
       print('\t\t--')
   print('\t----')
