@@ -542,3 +542,13 @@ typeFriendly: Azure ExpressRoute
 updatedAt: '2020-03-24T15:56:20.149Z'
 version: '2'
 ```
+=========
+```
+python3 pccwOrderAws.py testNicDavid 5e429ef0d6b9a000166c3b65 5aa730f8efe3bc00124d0766 50 invoice 265034252711 1
+3602;3603;dxcon-fh4jzrsa
+```
+=========
+```
+python3 pccwDeleteConnection.py 5e7a742103be0d0014960197
+connection id 5e7a742103be0d0014960197 status is: DELETING
+```

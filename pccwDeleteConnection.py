@@ -17,4 +17,8 @@ if len(sys.argv) != 2:
 # Delete Connection
 #
 response = pccwMain.ppcwDeleteConnection(os.environ['PCCWCOMPANY'], auth, sys.argv[1])
-print(yaml.dump(response))
+#
+# Read Connection status
+#
+response = pccwMain.ppcwReadConnection(os.environ['PCCWCOMPANY'], auth, sys.argv[1])
+print('connection id ' + str(sys.argv[1]) + ' status is: ' + str(response['status']))
