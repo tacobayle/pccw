@@ -6,6 +6,7 @@ import os
 #
 # export PCCWLOGIN=abcdef
 # export PCCWPASS=abcdef
+# export PCCWCOMPANY=abcdef
 #
 def pccwGetToken(username, password):
   # this function queries the API to retrieve the token
@@ -37,7 +38,6 @@ def ppcwDeleteConnection(company, fheaders, idConnection):
     res = requests.delete(url, headers = fheaders)
     response = json.loads(res.content.decode('utf-8'))
     return response
-#
 #
 #
 #

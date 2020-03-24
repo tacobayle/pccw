@@ -45,8 +45,6 @@ body1 = """{"srcPortId": "5e429ef0d6b9a000166c3b65", "destPortId": "5b456eda852d
 res = requests.put(url, data=body1, headers = auth)
 response = json.loads(res.content.decode('utf-8'))
 idPccw = response['id']
-#print(idPccw)
-#print(auth)
 while True:
   response = pccwMain.ppcwReadConnection(os.environ['PCCWCOMPANY'], auth, idPccw)
   #print(response['status'])
