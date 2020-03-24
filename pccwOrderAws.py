@@ -12,14 +12,34 @@ auth = pccwMain.pccwGetToken(os.environ['PCCWLOGIN'], os.environ['PCCWPASS'])
 #
 if len(sys.argv) != 6:
   print("""ERROR: script expects five arguments for:
+  awsConnectionName
   srcPortId
-  awsAccountNumber
-  awsConnectionName
-  awsConnectionName
+  destPortId
   speed
+  paymentType
+  awsAccountNumber
   """)
   exit()
 #
+# retrieve AWS regions, Ids, Cities
+#
+response = pccwMain.ppcwGetAwsRegion(auth)
+listAwsRegion = []
+listAwsRegionId = []
+for item in response['results']:
+  dictAwsRegion = {}
+  dictAwsRegion['region'] = item['partner']['regionNames'][0]
+  dictAwsRegion['id'] = item['id']
+  dictAwsRegion['city'] = item['metro']['name']
+  listAwsRegionId.append(item['id'])
+  listAwsRegion.append(dictAwsRegion)
+#
+# check
+#
+if sys.argv[3] not in listAwsRegionId:
+  print('please choose one of the following ids')
+  print(yaml.dump(listAwsRegion))
+  exit()
 # Order an AWS Direct Connect
 #
 # data tested: {"srcPortId":"5e429ef0d6b9a000166c3b65","destPortId":"5b456eda852dad001a8cf2cd","srcVlanRequest":null,"speed":500,"name":"AWS Direct Connect","type":"LAYER2","partner":{"account":"265034252711"},"regionId":"5a80c78c1347a30012dd1c53","destRegionId":"5a80c78c1347a30012dd1c53","duration":1,"durationUnit":"d","evergreen":false,"paymentType":"invoice"}
@@ -28,13 +48,13 @@ url = 'https://api.consoleconnect.com/api/company/eurovisionservices/connections
 #  "destUsername": "amazon",
 body = {
   "type": "LAYER2",
-  "name": sys.argv[3],
-  "srcPortId": sys.argv[1],
-  "destPortId": "5aa730f8efe3bc00124d0766",
-  "speed": int(sys.argv[5]),
-  "paymentType": sys.argv[4],
+  "name": sys.argv[1],
+  "srcPortId": sys.argv[2],
+  "destPortId": sys.argv[3],
+  "speed": int(sys.argv[4]),
+  "paymentType": sys.argv[5],
   "partner": {
-    "account": sys.argv[2]
+    "account": sys.argv[6]
   }
 }
 body1 = """{"srcPortId": "5e429ef0d6b9a000166c3b65", "destPortId": "5b456eda852dad001a8cf2cd" , "srcVlanRequest": null, "speed": 500, "name": "AWS Direct Connect", "type": "LAYER2", "partner": {"account": "265034252711"}, "regionId": "5a80c78c1347a30012dd1c53","destRegionId": "5a80c78c1347a30012dd1c53", "duration": 1, "durationUnit": "d", "evergreen": false, "paymentType": "invoice"}"""

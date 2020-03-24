@@ -21,6 +21,12 @@ def pccwGetToken(username, password):
     dict['Content-Type'] = 'application/json'
     return dict
 
+def ppcwGetAwsRegion(fheaders):
+    url = 'https://api.consoleconnect.com/api/directConnectPartner/amazon/regions'
+    res = requests.get(url, headers = fheaders)
+    response = json.loads(res.content.decode('utf-8'))
+    return response
+
 def ppcwReadPort(company, fheaders):
     url = 'https://api.consoleconnect.com/api/company/' + company + '/ports'
     res = requests.get(url, headers = fheaders)
