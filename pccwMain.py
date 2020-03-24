@@ -20,12 +20,23 @@ def pccwGetToken(username, password):
     dict['Content-Type'] = 'application/json'
     return dict
 
-def ppcwReadConnection(fheaders, idConnection):
-    url = 'https://api.consoleconnect.com/api/company/eurovisionservices/connections/' + str(idConnection)
+def ppcwReadPort(company, fheaders):
+    url = 'https://api.consoleconnect.com/api/company/' + company + '/ports'
     res = requests.get(url, headers = fheaders)
     response = json.loads(res.content.decode('utf-8'))
     return response
 
+def ppcwReadConnection(company, fheaders, idConnection):
+    url = 'https://api.consoleconnect.com/api/company/' + company + '/connections/' + str(idConnection)
+    res = requests.get(url, headers = fheaders)
+    response = json.loads(res.content.decode('utf-8'))
+    return response
+
+def ppcwDeleteConnection(company, fheaders, idConnection):
+    url = 'https://api.consoleconnect.com/api/v2/company/' + company + '/connections/' + str(idConnection)
+    res = requests.delete(url, headers = fheaders)
+    response = json.loads(res.content.decode('utf-8'))
+    return response
 #
 #
 #

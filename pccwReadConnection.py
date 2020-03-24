@@ -5,6 +5,7 @@ import pccwMain
 #
 # export PCCWLOGIN=abcdef
 # export PCCWPASS=abcdef
+# export PCCWCOMPANY=abcdef
 #
 # retrieve API token
 auth = pccwMain.pccwGetToken(os.environ['PCCWLOGIN'], os.environ['PCCWPASS'])
@@ -12,15 +13,8 @@ auth = pccwMain.pccwGetToken(os.environ['PCCWLOGIN'], os.environ['PCCWPASS'])
 if len(sys.argv) != 2:
   print('ERROR: script expects one argument for connection id')
   exit()
-connectionId = sys.argv[1]
 #
 # Read Connection
 #
-url = 'https://api.consoleconnect.com/api/company/eurovisionservices/connections/' + str(connectionId)
-res = requests.get(url, headers = auth)
-response = json.loads(res.content.decode('utf-8'))
-# print(yaml.dump(response))
-print(response['status'])
-print(response['srcTag'])
-print(response['destTag'])
-print(response['partner']['connectionId'])
+response = pccwMain.ppcwReadConnection(os.environ['PCCWCOMPANY'], auth, sys.argv[1])
+print(yaml.dump(response))

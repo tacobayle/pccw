@@ -5,6 +5,7 @@ import pccwMain
 #
 # export PCCWLOGIN=abcdef
 # export PCCWPASS=abcdef
+# export PCCWCOMPANY=abcdef
 #
 # retrieve API token
 auth = pccwMain.pccwGetToken(os.environ['PCCWLOGIN'], os.environ['PCCWPASS'])
@@ -47,10 +48,10 @@ idPccw = response['id']
 #print(idPccw)
 #print(auth)
 while True:
-  response = pccwMain.ppcwReadConnection(auth, idPccw)
+  response = pccwMain.ppcwReadConnection(os.environ['PCCWCOMPANY'], auth, idPccw)
   #print(response['status'])
   if response['status'] == 'PENDING_ACCEPTANCE':
       break
   time.sleep(15)
-response = pccwMain.ppcwReadConnection(auth, idPccw)
+response = pccwMain.ppcwReadConnection(os.environ['PCCWCOMPANY'], auth, idPccw)
 print(str(response['srcTag']) + ';' + str(response['destTag']) + ';' + str(response['partner']['connectionId']))

@@ -5,15 +5,14 @@ import pccwMain
 #
 # export PCCWLOGIN=abcdef
 # export PCCWPASS=abcdef
+# export PCCWCOMPANY=abcdef
 #
 # retrieve API token
 auth = pccwMain.pccwGetToken(os.environ['PCCWLOGIN'], os.environ['PCCWPASS'])
 #
 # List ports
 #
-url = 'https://api.consoleconnect.com/api/company/eurovisionservices/ports'
-res = requests.get(url, headers = auth)
-response = json.loads(res.content.decode('utf-8'))
+response = pccwMain.ppcwReadPort(os.environ['PCCWCOMPANY'], auth)
 #
 # pretty print response
 #
