@@ -22,30 +22,13 @@ if len(sys.argv) != 8:
   """)
   exit()
 #
-# retrieve AWS regions, Ids, Cities
-#
-response = pccwMain.ppcwGetAwsRegion(auth)
-listAwsRegion = []
-listAwsRegionId = []
-for item in response['results']:
-  dictAwsRegion = {}
-  dictAwsRegion['region'] = item['partner']['regionNames'][0]
-  dictAwsRegion['id'] = item['id']
-  dictAwsRegion['city'] = item['metro']['name']
-  listAwsRegionId.append(item['id'])
-  listAwsRegion.append(dictAwsRegion)
-#
 # Retrieve PCCW ports
 #
-listPccwPortId = []
-listPccwPort = []
-response = pccwMain.ppcwReadPort(os.environ['PCCWCOMPANY'], auth)
-for port in response['results']:
-  dictPccwPort = {}
-  dictPccwPort['dcName'] = str(port['dataCenterFacility']['username'])
-  dictPccwPort['id'] = str(port['id'])
-  listPccwPort.append(dictPccwPort)
-  listPccwPortId.append(str(port['id']))
+listPccwPort, listPccwPortId = pccwMain.ppcwReadPortId(os.environ['PCCWCOMPANY'], auth)
+#
+# retrieve AWS regions, Ids, Cities
+#
+listAwsRegion, listAwsRegionId = pccwMain.ppcwGetAwsRegion(auth)
 #
 # check if AWS src port is correct
 #

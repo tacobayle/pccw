@@ -25,13 +25,36 @@ def ppcwGetAwsRegion(fheaders):
     url = 'https://api.consoleconnect.com/api/directConnectPartner/amazon/regions'
     res = requests.get(url, headers = fheaders)
     response = json.loads(res.content.decode('utf-8'))
-    return response
+    fListAwsRegion = []
+    fListAwsRegionId = []
+    for item in response['results']:
+      dictAwsRegion = {}
+      dictAwsRegion['region'] = item['partner']['regionNames'][0]
+      dictAwsRegion['id'] = item['id']
+      dictAwsRegion['city'] = item['metro']['name']
+      fListAwsRegionId.append(item['id'])
+      fListAwsRegion.append(dictAwsRegion)
+    return fListAwsRegion, fListAwsRegionId
 
 def ppcwReadPort(company, fheaders):
     url = 'https://api.consoleconnect.com/api/company/' + company + '/ports'
     res = requests.get(url, headers = fheaders)
     response = json.loads(res.content.decode('utf-8'))
     return response
+
+def ppcwReadPortId(company, fheaders):
+    url = 'https://api.consoleconnect.com/api/company/' + company + '/ports'
+    res = requests.get(url, headers = fheaders)
+    response = json.loads(res.content.decode('utf-8'))
+    fListPccwPortId = []
+    fListPccwPort = []
+    for port in response['results']:
+      dictPccwPort = {}
+      dictPccwPort['dcName'] = str(port['dataCenterFacility']['username'])
+      dictPccwPort['id'] = str(port['id'])
+      fListPccwPort.append(dictPccwPort)
+      fListPccwPortId.append(str(port['id']))
+    return fListPccwPort, fListPccwPortId
 
 def ppcwReadConnection(company, fheaders, idConnection):
     url = 'https://api.consoleconnect.com/api/company/' + company + '/connections/' + str(idConnection)
